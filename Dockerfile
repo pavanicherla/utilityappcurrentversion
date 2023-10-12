@@ -1,4 +1,4 @@
-FROM pavanicherla/argocd:v2.7.2-update
+FROM pavanicherla/argocd:v2.7.2_v2
 #Dockerfile
 USER root
 RUN apt-get update -y
@@ -9,6 +9,7 @@ RUN apt-get install -y \
         git \
         netcat \
         bind9 dnsutils \
+        python3.11 \
         python3-pip
 RUN pip install --upgrade pip
 RUN pip3 install --no-cache-dir \
@@ -16,7 +17,9 @@ RUN pip3 install --no-cache-dir \
         jq==1.6
 
 RUN curl -Lo yq https://github.com/mikefarah/yq/releases/download/{v4.30.5}/yq/_{v4.30.5}_linux-amd64
+RUN cp yq /usr/local/bin/
 RUN curl -Lo argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/{v1.14.0}/argocd-vault-plugin_{v1.14.0}_linux_amd64
+RUN cp  argocd-vault-plugin /usr/local/bin/
 RUN apt-get clean
 RUN rm -rf /var/cache/yum
 # Switch back to non-root user 
