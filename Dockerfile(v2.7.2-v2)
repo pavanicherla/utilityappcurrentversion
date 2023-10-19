@@ -1,8 +1,15 @@
 FROM pavanicherla/argocd:v2.7.2_v2
 #Dockerfile
+
+ENV JQ_VERSION=1.6
+ENV YQ_VERSION=v4.35.2
+ENV AVP_VERSION=1.14.0
+
 USER root
-RUN apt-get update -y
-RUN apt-get install -y \
+
+# System modules
+RUN apt-get update -y && apt-get install -y \
+        sudo \
         mysql-client \
         libcurl4 \
         curl \
@@ -10,17 +17,28 @@ RUN apt-get install -y \
         netcat \
         bind9 dnsutils \
         python3.11 \
-        python3-pip
-RUN pip install --upgrade pip
-RUN pip3 install --no-cache-dir \
-        awscli==1.29.10 \
-        jq==1.6
+        python3-pip \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
 
-RUN curl -Lo yq https://github.com/mikefarah/yq/releases/download/{v4.30.5}/yq/_{v4.30.5}_linux-amd64
-RUN cp yq /usr/local/bin/
-RUN curl -Lo argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/{v1.14.0}/argocd-vault-plugin_{v1.14.0}_linux_amd64
-RUN cp  argocd-vault-plugin /usr/local/bin/
-RUN apt-get clean
-RUN rm -rf /var/cache/yum
-# Switch back to non-root user 
-USER 999
+# Python libraries
+RUN pip install --upgrade pip && pip3 install --no-cache-dir \
+        awscli==1.29.10
+
+# Additional binaries
+RUN curl -Lo /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-${JQ_VERSION}/jq-linux64 \
+        && chmod +x /usr/local/bin/jq
+RUN curl -Lo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 \
+        && chmod +x /usr/local/bin/yq
+RUN curl -Lo /usr/local/bin/argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64 \
+        && chmod +x /usr/local/bin/argocd-vault-plugin
+
+# Create user
+RUN ln -fs /usr/share/zoneinfo/Asia/Singapore /etc/localtime
+RUN useradd -m -s /bin/bash -G sudo adak8s \
+        && echo '' >> /etc/sudoers \
+        && echo 'adak8s ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Change user
+USER adak8s
+WORKDIR /home/adak8s
