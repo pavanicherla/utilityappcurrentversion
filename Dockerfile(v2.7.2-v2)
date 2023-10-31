@@ -1,5 +1,26 @@
-FROM pavanicherla/argocd:v2.7.2_v2
+FROM pavanicherla/argocd:v2.7.2_v2 AS builder
 #Dockerfile
+RUN apt-get update -y && apt-get install -y \
+        openssh-server \
+        nginx \
+        unzip \
+        fcgiwrap \
+        git-lfs \
+        make \
+        wget \
+        gcc \
+        zip
+FROM alpine:3.18.4  
+
+COPY --from=builder /usr/bin/openssh-server /usr/bin/openssh-server
+COPY --from=builder /usr/bin/nginx /usr/bin/nginx
+COPY --from=builder /usr/bin/unzip /usr/bin/unzip
+COPY --from=builder /usr/bin/fcgiwrap /usr/bin/fcgiwrap
+COPY --from=builder /usr/bin/git-lfs /usr/bin/git-lfs
+COPY --from=builder /usr/bin/make /usr/bin/make
+COPY --from=builder /usr/bin/wget /usr/bin/wget
+COPY --from=builder /usr/bin/gcc /usr/bin/gcc
+COPY --from=builder /usr/bin/zip /usr/bin/zip
 
 ENV JQ_VERSION=1.6
 ENV YQ_VERSION=v4.35.2
