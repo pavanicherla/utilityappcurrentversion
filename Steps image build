@@ -1,0 +1,14 @@
+1)Create a EC2 instance with a key-value pair and size = 25mb.
+2)Type this command to get into root user "sudo su".
+3)Install docker using google.
+4)"mkdir utilityapp && cd utilityapp"
+5)"touch Dockerfile"
+6) vim Dockerfile
+7)paste these instructions
+8)Dockerfile:
+ 9) docker build -t utilityapp:v2.0.1-v3 .
+10)Type this command "docker images"(this will give list of images)
+11)Type "docker login"( this will ask for username and pwd and you will be successfully logged in
+12)Type "docker tag  utilityapp:v2.0.1-v3 pavanicherla/utilityapp:v2.0.1-v3"
+13)Type docker images (this command checks whether the pavanicherla/utilityapp is in the docker images or not
+14)Type docker pusht pavanicherla/utilityapp:v2.0.1-v3( this will push docker image to docker hub in your account
