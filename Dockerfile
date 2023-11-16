@@ -17,22 +17,23 @@ ARG YQ_VERSION=v4.35.2
 ARG K8SGPT_VERSION=v0.3.18
 ARG MYSQL_VERSION=10.11.5-r0
 ARG GIT_VERSION=2.40.1-r0
+ARG KYVERNO_VERSION=v1.9.1
 
 USER root
 
 # System modules
 RUN apk update && apk upgrade
 RUN apk add --no-cache \
-   bash \
-   sudo \
-   openssh-client \
-   curl \
-   git=${GIT_VERSION} \
-   mysql-client=${MYSQL_VERSION} \
-   bind-tools \
-   net-tools \
-   python3=${PYTHON_VERSION} \
-   py3-pip
+    bash \
+    sudo \
+    openssh-client \
+    curl \
+    git=${GIT_VERSION} \
+    mysql-client=${MYSQL_VERSION} \
+    bind-tools \
+    net-tools \
+    python3=${PYTHON_VERSION} \
+    py3-pip
 
 # Python libraries
 RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
@@ -47,6 +48,12 @@ RUN curl -Lo /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq
     && chmod +x /usr/local/bin/jq
 RUN curl -Lo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 \
     && chmod +x /usr/local/bin/yq
+RUN mkdir kyverno \
+    && curl -Lo kyverno/kyverno.tar.gz https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VERSION}/kyverno-cli_${KYVERNO_VERSION}_linux_x86_64.tar.gz \
+    && tar -xvf kyverno/kyverno.tar.gz -C kyverno/ \
+    && cp kyverno/kyverno /usr/local/bin/ \
+    && rm -rf kyverno \
+    && chmod +x /usr/local/bin/kyverno
 
 # Create user
 RUN apk add --no-cache tzdata \
