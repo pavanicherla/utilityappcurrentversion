@@ -11,4 +11,4 @@
 11)Type "docker login"( this will ask for username and pwd and you will be successfully logged in
 12)Type "docker tag  utilityapp:v2.0.1-v3 pavanicherla/utilityapp:v2.0.1-v3"
 13)Type docker images (this command checks whether the pavanicherla/utilityapp is in the docker images or not
-14)Type docker pusht pavanicherla/utilityapp:v2.0.1-v3( this will push docker image to docker hub in your account
+14)Type docker pusht pavanicherla/utilityapp:v2.7.2-r8( this will push docker image to docker hub in your account
