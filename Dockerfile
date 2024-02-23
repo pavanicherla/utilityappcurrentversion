@@ -1,5 +1,5 @@
 ARG ARGOCD_VERSION=v2.10.1
-ARG ALPINE_VERSION=3.18.4
+ARG ALPINE_VERSION=3.19.1
 
 FROM quay.io/argoproj/argocd:${ARGOCD_VERSION} AS ARGOCD
 FROM alpine:${ALPINE_VERSION} AS base
@@ -32,7 +32,7 @@ RUN apk add --no-cache \
     curl \
     perl \
     mariadb \
-    sqlite \
+    sqlite3 \
     git=${GIT_VERSION} \
     mysql-client=${MYSQL_VERSION} \
     bind-tools \
