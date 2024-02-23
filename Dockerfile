@@ -11,13 +11,14 @@ COPY --from=ARGOCD /usr/local/bin/helm /usr/local/bin/helm
 #Dockerfile
 ARG PYTHON_VERSION=3.11.6-r0
 ARG KUBECTL_VERSION=v1.26.0
-ARG AVP_VERSION=1.16.1
+ARG AVP_VERSION=1.16.2
 ARG JQ_VERSION=1.6
 ARG YQ_VERSION=v4.35.2
 ARG K8SGPT_VERSION=v0.3.18
 ARG MYSQL_VERSION=10.11.5-r0
 ARG GIT_VERSION=2.40.1-r0
 ARG KYVERNO_VERSION=v1.9.1
+
 
 USER root
 
@@ -29,6 +30,9 @@ RUN apk add --no-cache \
     sudo \
     openssh-client \
     curl \
+    perl \
+    mariadb \
+    sqlite \
     git=${GIT_VERSION} \
     mysql-client=${MYSQL_VERSION} \
     bind-tools \
