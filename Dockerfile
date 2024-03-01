@@ -32,7 +32,7 @@ RUN apk add --no-cache \
     curl \
     perl \
     mariadb \
-    sqlite3 \
+    sqlite \
     git=${GIT_VERSION} \
     mysql-client=${MYSQL_VERSION} \
     bind-tools \
