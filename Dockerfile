@@ -37,6 +37,7 @@ RUN apk add --no-cache \
     mysql-client=${MYSQL_VERSION} \
     bind-tools \
     net-tools \
+    coreutils \
     python3=${PYTHON_VERSION} \
     py3-pip
 
