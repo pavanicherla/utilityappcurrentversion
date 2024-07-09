@@ -29,12 +29,12 @@ RUN apk add --no-cache \
     openssl \
     sudo \
     openssh-client \
-    #curl \
-    #perl \
-    #mariadb \
-    #sqlite \
-    git=${GIT_VERSION} \
-    mysql-client=${MYSQL_VERSION} \
+    curl \
+    perl \
+    mariadb \
+    sqlite \
+    #git=${GIT_VERSION} \
+    #mysql-client=${MYSQL_VERSION} \
     bind-tools \
     net-tools \
     coreutils \
