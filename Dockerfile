@@ -9,7 +9,7 @@ COPY --from=ARGOCD /usr/local/bin/kustomize /usr/local/bin/kustomize
 COPY --from=ARGOCD /usr/local/bin/helm /usr/local/bin/helm
 
 #Dockerfile
-ARG PYTHON_VERSION=3.11.8-r0
+ARG PYTHON_VERSION=3.12.4
 ARG KUBECTL_VERSION=v1.26.0
 ARG AVP_VERSION=1.16.2
 ARG JQ_VERSION=1.6
