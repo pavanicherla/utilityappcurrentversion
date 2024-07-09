@@ -27,12 +27,12 @@ RUN apk update && apk upgrade
 RUN apk add --no-cache \
     bash \
     openssl \
-    #sudo \
-    #openssh-client \
-    curl \
-    perl \
-    mariadb \
-    sqlite \
+    sudo \
+    openssh-client \
+    #curl \
+    #perl \
+    #mariadb \
+    #sqlite \
     git=${GIT_VERSION} \
     mysql-client=${MYSQL_VERSION} \
     bind-tools \
