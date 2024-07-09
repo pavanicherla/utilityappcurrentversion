@@ -39,10 +39,11 @@ RUN apk add --no-cache \
     net-tools \
     coreutils \
     python3=${PYTHON_VERSION} \
-    py3-pip
+    python3−pip
 
 # Python libraries
-RUN pip3 install --upgrade pip && pip3 install --no-cache-dir 
+RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
+    awscli==1.29.10
    
 
 # Additional binaries
