@@ -26,9 +26,9 @@ USER root
 RUN apk update && apk upgrade
 RUN apk add --no-cache \
     bash \
-    #openssl \
-    sudo \
-    openssh-client \
+    openssl \
+    #sudo \
+    #openssh-client \
     curl \
     perl \
     mariadb \
