@@ -42,8 +42,8 @@ RUN apk add --no-cache \
     py3-pip
 
 # Python libraries
-RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
-    awscli==1.29.10
+RUN pip3 install --upgrade pip && pip3 install --no-cache-dir 
+   
 
 # Additional binaries
 RUN curl -Lo /usr/local/bin/kubectl https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
