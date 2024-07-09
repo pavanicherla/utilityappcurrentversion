@@ -16,7 +16,7 @@ ARG JQ_VERSION=1.6
 ARG YQ_VERSION=v4.35.2
 ARG K8SGPT_VERSION=v0.3.18
 ARG MYSQL_VERSION=10.11.6-r0
-ARG GIT_VERSION=2.40.1-r0
+ARG GIT_VERSION=2.45.2
 ARG KYVERNO_VERSION=v1.9.1
 
 
@@ -25,7 +25,7 @@ USER root
 # System modules
 RUN apk update && apk upgrade
 RUN apk add --no-cache \
-    #bash \
+    bash \
     openssl \
     sudo \
     openssh-client \
