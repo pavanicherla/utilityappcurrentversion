@@ -26,7 +26,7 @@ USER root
 RUN apk update && apk upgrade
 RUN apk add --no-cache \
     bash \
-    openssl \
+    #openssl \
     sudo \
     openssh-client \
     curl \
