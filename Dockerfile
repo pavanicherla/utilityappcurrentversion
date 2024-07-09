@@ -33,10 +33,10 @@ RUN apk add --no-cache \
     perl \
     mariadb \
     sqlite \
-    #git=${GIT_VERSION} \
-    #mysql-client=${MYSQL_VERSION} \
-    bind-tools \
-    net-tools \
+    git=${GIT_VERSION} \
+    mysql-client=${MYSQL_VERSION} \
+    #bind-tools \
+    #net-tools \
     coreutils \
     python3=${PYTHON_VERSION} \
     py3-pip
