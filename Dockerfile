@@ -38,7 +38,7 @@ RUN apk add --no-cache \
     bind-tools \
     net-tools \
     coreutils \
-    #python3=${PYTHON_VERSION} \
+    python3=${PYTHON_VERSION} \
     py3-pip
 
 # Python libraries
