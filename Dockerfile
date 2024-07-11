@@ -24,22 +24,21 @@ USER root
 
 # System modules
 RUN apk update && apk upgrade
-RUN apk add \
-    bash \
-    openssl \
-    sudo \
-    openssh-client \
-    curl \
-    perl \
-    mariadb \
-    sqlite \
-    git=${GIT_VERSION} \
-    mysql-client=${MYSQL_VERSION} \
-    bind-tools \
-    net-tools \
-    coreutils \
-    python3=${PYTHON_VERSION} \
-    py3-pip
+RUN apk add bash
+RUN apk add openssl 
+RUN apk add  sudo 
+RUN apk add openssh-client 
+RUN apk add curl 
+RUN apk add perl 
+RUN apk add mariadb 
+RUN apk add sqlite 
+RUN apk add git=${GIT_VERSION} 
+RUN apk add mysql-client=${MYSQL_VERSION} 
+RUN apk add bind-tools 
+RUN apk add net-tools 
+RUN apk add coreutils 
+RUN apk add python3=${PYTHON_VERSION} 
+RUN apk add py3-pip
 
 # Python libraries
 RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
