@@ -16,7 +16,7 @@ ARG JQ_VERSION=1.6
 ARG YQ_VERSION=v4.35.2
 ARG K8SGPT_VERSION=v0.3.18
 ARG MYSQL_VERSION=10.11.6-r0
-#ARG GIT_VERSION=2.45.2
+ARG GIT_VERSION=2.45.2
 ARG KYVERNO_VERSION=v1.9.1
 
 
@@ -32,12 +32,12 @@ RUN apk add curl
 RUN apk add perl 
 RUN apk add mariadb 
 RUN apk add sqlite 
-#RUN apk add git=${GIT_VERSION} 
-RUN apk add mysql-client=${MYSQL_VERSION} 
+RUN apk add git==${GIT_VERSION} 
+RUN apk add mysql-client==${MYSQL_VERSION} 
 RUN apk add bind-tools 
 RUN apk add net-tools 
 RUN apk add coreutils 
-RUN apk add python3=${PYTHON_VERSION} 
+RUN apk add python3==${PYTHON_VERSION} 
 RUN apk add py3-pip
 
 # Python libraries
