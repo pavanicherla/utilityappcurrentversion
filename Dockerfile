@@ -24,7 +24,7 @@ USER root
 
 # System modules
 RUN apk update && apk upgrade
-RUN apk add --no-cache \
+RUN apk add \
     bash \
     openssl \
     sudo \
