@@ -1,65 +1,91 @@
-ARG ARGOCD_VERSION=v2.11.4
-ARG ALPINE_VERSION=3.18.4
+ARG ARGOCD_VER=v2.11.4
+ARG ALPINE_VER=3.20.0
 
-FROM quay.io/argoproj/argocd:${ARGOCD_VERSION} AS ARGOCD
-FROM alpine:${ALPINE_VERSION} AS base
+FROM quay.io/argoproj/argocd:${ARGOCD_VER} AS ARGOCD
+FROM alpine:${ALPINE_VER}
 
 COPY --from=ARGOCD /usr/local/bin/argocd /usr/local/bin/argocd
 COPY --from=ARGOCD /usr/local/bin/kustomize /usr/local/bin/kustomize
 COPY --from=ARGOCD /usr/local/bin/helm /usr/local/bin/helm
 
 #Dockerfile
-ARG PYTHON_VERSION=3.11.8-r0
-ARG KUBECTL_VERSION=v1.26.0
-ARG AVP_VERSION=1.16.2
-ARG JQ_VERSION=1.6
-ARG YQ_VERSION=v4.35.2
-ARG K8SGPT_VERSION=v0.3.18
-ARG MYSQL_VERSION=10.11.8-r0
-ARG GIT_VERSION=2.40.1-r0
-ARG KYVERNO_VERSION=v1.9.1
-
+ARG KUBECTL_VER=v1.27.0
+ARG AVP_VER=1.17.0
+ARG JQ_VER=1.7.1
+ARG YQ_VER=v4.44.1
+ARG K8SGPT_VER=v0.3.18
+ARG MYSQL_VER=10.11.8-r0
+ARG GIT_VER=2.45.1-r0
+ARG KYVERNO_VER=v1.12.2-rc.2
+ARG KUBECONFORM_VER=v0.6.6
+ARG KUBELINTER_VER=v0.6.8
+ARG OC_VER=latest
+ARG PYPI_AWSCLI_VER=1.29.10
+ARG PYPI_PYYAML_VER=6.0.1
 
 USER root
 
 # System modules
 RUN apk update && apk upgrade
-RUN apk add bash
-RUN apk add openssl 
-RUN apk add  sudo 
-RUN apk add openssh-client 
-RUN apk add curl 
-RUN apk add perl 
-RUN apk add mariadb 
-RUN apk add sqlite 
-RUN apk add git==${GIT_VERSION} 
-RUN apk add mysql-client==${MYSQL_VERSION} 
-RUN apk add bind-tools 
-RUN apk add net-tools 
-RUN apk add coreutils 
-RUN apk add python3==${PYTHON_VERSION} 
-RUN apk add py3-pip
+RUN apk add --no-cache \
+    bash \
+    sudo \
+    openssh-client \
+    curl \
+    git \
+    mysql-client \
+    bind-tools \
+    net-tools \
+    python3 \
+    py3-pip 
+  
+# ENV PATH="$PATH:/root/.local/bin"
 
 # Python libraries
-RUN pip3 install --upgrade pip && pip3 install --no-cache-dir \
-    awscli==1.29.10
-   
+RUN pip3 install --no-cache-dir --break-system-packages \
+    awscli==${PYPI_AWSCLI_VER} \
+    pyyaml==${PYPI_PYYAML_VER} \
+    openapi2jsonschema
+# RUN pipx install \
+#     awscli==${PYPI_AWSCLI_VER} \
+#     openapi2jsonschema
 
 # Additional binaries
-RUN curl -Lo /usr/local/bin/kubectl https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
+RUN curl -Lo /usr/local/bin/kubectl https://dl.k8s.io/release/${KUBECTL_VER}/bin/linux/amd64/kubectl \
     && chmod +x /usr/local/bin/kubectl
-RUN curl -Lo /usr/local/bin/argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64 \
+RUN curl -Lo /usr/local/bin/argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VER}/argocd-vault-plugin_${AVP_VER}_linux_amd64 \
     && chmod +x /usr/local/bin/argocd-vault-plugin
-RUN curl -Lo /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-${JQ_VERSION}/jq-linux64 \
+RUN curl -Lo /usr/local/bin/jq https://github.com/jqlang/jq/releases/download/jq-${JQ_VER}/jq-linux64 \
     && chmod +x /usr/local/bin/jq
-RUN curl -Lo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 \
+RUN curl -Lo /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VER}/yq_linux_amd64 \
     && chmod +x /usr/local/bin/yq
-RUN mkdir kyverno \
-    && curl -Lo kyverno/kyverno.tar.gz https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VERSION}/kyverno-cli_${KYVERNO_VERSION}_linux_x86_64.tar.gz \
-    && tar -xvf kyverno/kyverno.tar.gz -C kyverno/ \
-    && cp kyverno/kyverno /usr/local/bin/ \
-    && rm -rf kyverno \
-    && chmod +x /usr/local/bin/kyverno
+RUN mkdir kubeconform \
+    && curl -Lo kubeconform/kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VER}/kubeconform-linux-amd64.tar.gz \
+    && tar -xvf kubeconform/kubeconform.tar.gz -C kubeconform/ \
+    && mv kubeconform/kubeconform /usr/local/bin/ \
+    && chmod +x /usr/local/bin/kubeconform \
+    && rm -rf kubeconform 
+RUN mkdir kube-linter \
+    && curl -Lo kube-linter/kube-linter.tar.gz https://github.com/stackrox/kube-linter/releases/download/${KUBELINTER_VER}/kube-linter-linux.tar.gz \
+    && tar -xvf kube-linter/kube-linter.tar.gz -C kube-linter/ \
+    && mv kube-linter/kube-linter /usr/local/bin/ \
+    && chmod +x /usr/local/bin/kube-linter \
+    && rm -rf kube-linter
+# RUN mkdir oc \    
+#     && curl -Lo oc/oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/oc/${OC_VER}/linux/oc.tar.gz \
+#     https://github.com/okd-project/okd/releases/download/4.13.0-0.okd-2023-10-28-065448/openshift-client-linux-4.13.0-0.okd-2023-10-28-065448.tar.gz
+#     && tar -xvf oc/oc.tar.gz -C oc/ \
+#     && mv oc/oc /usr/local/bin/ \
+#     && chmod +x /usr/local/bin/oc \
+#     && mv oc/kubectl /usr/local/bin/ \
+#     && chmod +x /usr/local/bin/kubectl \
+#     && rm -rf oc
+# RUN mkdir kyverno \
+#     && curl -Lo kyverno/kyverno.tar.gz https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VER}/kyverno-cli_${KYVERNO_VER}_linux_x86_64.tar.gz \
+#     && tar -xvf kyverno/kyverno.tar.gz -C kyverno/ \
+#     && cp kyverno/kyverno /usr/local/bin/ \
+#     && rm -rf kyverno \
+#     && chmod +x /usr/local/bin/kyverno
 
 # Create user
 RUN apk add --no-cache tzdata \
