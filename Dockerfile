@@ -10,7 +10,7 @@ COPY --from=ARGOCD /usr/local/bin/helm /usr/local/bin/helm
 
 #Dockerfile
 ARG KUBECTL_VER=v1.27.0
-ARG AVP_VER=1.17.0
+ARG AVP_VER=1.14.0
 ARG JQ_VER=1.7.1
 ARG YQ_VER=v4.44.1
 ARG K8SGPT_VER=v0.3.18
