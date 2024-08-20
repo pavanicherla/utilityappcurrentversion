@@ -37,6 +37,7 @@ RUN apk add --no-cache \
     bind-tools \
     net-tools \
     python3 \
+    postgresql-client \
     py3-pip 
   
 # ENV PATH="$PATH:/root/.local/bin"
