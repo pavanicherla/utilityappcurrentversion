@@ -1,4 +1,4 @@
-ARG ARGOCD_VER=v2.11.4
+ARG ARGOCD_VER=v2.11.0
 ARG ALPINE_VER=3.20.0
 
 FROM quay.io/argoproj/argocd:${ARGOCD_VER} AS ARGOCD
@@ -37,7 +37,8 @@ RUN apk add --no-cache \
     bind-tools \
     net-tools \
     python3 \
-    py3-pip 
+    py3-pip \
+    ansible
   
 # ENV PATH="$PATH:/root/.local/bin"
 
@@ -71,15 +72,15 @@ RUN mkdir kube-linter \
     && mv kube-linter/kube-linter /usr/local/bin/ \
     && chmod +x /usr/local/bin/kube-linter \
     && rm -rf kube-linter
-# RUN mkdir oc \    
-#     && curl -Lo oc/oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/oc/${OC_VER}/linux/oc.tar.gz \
-#     https://github.com/okd-project/okd/releases/download/4.13.0-0.okd-2023-10-28-065448/openshift-client-linux-4.13.0-0.okd-2023-10-28-065448.tar.gz
-#     && tar -xvf oc/oc.tar.gz -C oc/ \
-#     && mv oc/oc /usr/local/bin/ \
-#     && chmod +x /usr/local/bin/oc \
-#     && mv oc/kubectl /usr/local/bin/ \
-#     && chmod +x /usr/local/bin/kubectl \
-#     && rm -rf oc
+RUN mkdir oc \    
+    && curl -Lo oc/oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/oc/latest/linux/oc.tar.gz \
+    # https://github.com/okd-project/okd/releases/download/4.13.0-0.okd-2023-10-28-065448/openshift-client-linux-4.13.0-0.okd-2023-10-28-065448.tar.gz \
+    && tar -xvf oc/oc.tar.gz -C oc/ \
+    && mv oc/oc /usr/local/bin/ \
+    && chmod +x /usr/local/bin/oc \
+    && mv oc/kubectl /usr/local/bin/ \
+    && chmod +x /usr/local/bin/kubectl \
+    && rm -rf oc
 # RUN mkdir kyverno \
 #     && curl -Lo kyverno/kyverno.tar.gz https://github.com/kyverno/kyverno/releases/download/${KYVERNO_VER}/kyverno-cli_${KYVERNO_VER}_linux_x86_64.tar.gz \
 #     && tar -xvf kyverno/kyverno.tar.gz -C kyverno/ \
