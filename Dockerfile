@@ -1,4 +1,4 @@
-ARG ARGOCD_VER=v2.12.4
+ARG ARGOCD_VER=v2.12.6
 ARG ALPINE_VER=3.20.3
 
 FROM quay.io/argoproj/argocd:${ARGOCD_VER} AS argocd
@@ -22,6 +22,7 @@ ARG KUBELINTER_VER=v0.6.8
 ARG OC_VER=4.16.9
 ARG PYPI_AWSCLI_VER=1.29.10
 ARG PYPI_PYYAML_VER=6.0.1
+ARG BUTANE_VER=v0.22.0-1
 
 USER root
 
@@ -62,7 +63,11 @@ RUN mkdir oc \
     && mv oc/oc /usr/local/bin/ \
     && chmod +x /usr/local/bin/oc \
     && mv oc/kubectl /usr/local/bin/ \
-    && chmod +x /usr/local/bin/kubectl \
+    && chmod +x /usr/local/bin/kubectl
+RUN curl -Lo oc/oc-install.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VER}/openshift-install-linux-4.16.9.tar.gz \
+    && tar -xvf oc/oc-install.tar.gz -C oc/ \
+    && mv oc/openshift-install /usr/local/bin/ \
+    && chmod +x /usr/local/bin/openshift-install \
     && rm -rf oc
 RUN curl -Lo /usr/local/bin/argocd-vault-plugin https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VER}/argocd-vault-plugin_${AVP_VER}_linux_amd64 \
     && chmod +x /usr/local/bin/argocd-vault-plugin
@@ -76,6 +81,9 @@ RUN mkdir kubeconform \
     && mv kubeconform/kubeconform /usr/local/bin/ \
     && chmod +x /usr/local/bin/kubeconform \
     && rm -rf kubeconform 
+RUN curl -Lo /usr/local/bin/butane https://mirror.openshift.com/pub/openshift-v4/clients/butane/${BUTANE_VER}/butane-amd64 \
+    && chmod +x /usr/local/bin/butane
+
 # RUN mkdir kube-linter \
 #     && curl -Lo kube-linter/kube-linter.tar.gz https://github.com/stackrox/kube-linter/releases/download/${KUBELINTER_VER}/kube-linter-linux.tar.gz \
 #     && tar -xvf kube-linter/kube-linter.tar.gz -C kube-linter/ \
