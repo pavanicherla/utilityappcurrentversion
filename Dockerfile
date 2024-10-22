@@ -83,6 +83,12 @@ RUN mkdir kubeconform \
     && rm -rf kubeconform 
 RUN curl -Lo /usr/local/bin/butane https://mirror.openshift.com/pub/openshift-v4/clients/butane/${BUTANE_VER}/butane-amd64 \
     && chmod +x /usr/local/bin/butane
+RUN mkdir nmstate \
+    && curl -Lo nmstate/nmstatectl-linux-x64.zip https://github.com/nmstate/nmstate/releases/download/v2.2.37/nmstatectl-linux-x64.zip \
+    && unzip nmstate/nmstatectl-linux-x64.zip -d nmstate/ \
+    && mv nmstate/nmstatectl /usr/local/bin/ \
+    && chmod +x /usr/local/bin/nmstatectl \
+    && rm -rf nmstate
 
 # RUN mkdir kube-linter \
 #     && curl -Lo kube-linter/kube-linter.tar.gz https://github.com/stackrox/kube-linter/releases/download/${KUBELINTER_VER}/kube-linter-linux.tar.gz \
