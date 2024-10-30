@@ -19,10 +19,11 @@ ARG GIT_VER=2.46.2-r0
 ARG KYVERNO_VER=v1.12.2-rc.2
 ARG KUBECONFORM_VER=v0.6.7
 ARG KUBELINTER_VER=v0.6.8
-ARG OC_VER=4.16.9
+ARG OC_VER=4.16.4
 ARG PYPI_AWSCLI_VER=1.29.10
 ARG PYPI_PYYAML_VER=6.0.1
 ARG BUTANE_VER=v0.22.0-1
+ARG NMSTATE_VER=v2.2.37
 
 USER root
 
@@ -41,7 +42,8 @@ RUN apk add --no-cache \
     postgresql-client \
     py3-pip \
     ansible \
-    gcompat
+    gcompat \
+    docker
   
 # ENV PATH="$PATH:/root/.local/bin"
 
@@ -64,7 +66,7 @@ RUN mkdir oc \
     && chmod +x /usr/local/bin/oc \
     && mv oc/kubectl /usr/local/bin/ \
     && chmod +x /usr/local/bin/kubectl
-RUN curl -Lo oc/oc-install.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VER}/openshift-install-linux-4.16.9.tar.gz \
+RUN curl -Lo oc/oc-install.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VER}/openshift-install-linux.tar.gz \
     && tar -xvf oc/oc-install.tar.gz -C oc/ \
     && mv oc/openshift-install /usr/local/bin/ \
     && chmod +x /usr/local/bin/openshift-install \
@@ -84,7 +86,7 @@ RUN mkdir kubeconform \
 RUN curl -Lo /usr/local/bin/butane https://mirror.openshift.com/pub/openshift-v4/clients/butane/${BUTANE_VER}/butane-amd64 \
     && chmod +x /usr/local/bin/butane
 RUN mkdir nmstate \
-    && curl -Lo nmstate/nmstatectl-linux-x64.zip https://github.com/nmstate/nmstate/releases/download/v2.2.37/nmstatectl-linux-x64.zip \
+    && curl -Lo nmstate/nmstatectl-linux-x64.zip https://github.com/nmstate/nmstate/releases/download/${NMSTATE_VER}/nmstatectl-linux-x64.zip \
     && unzip nmstate/nmstatectl-linux-x64.zip -d nmstate/ \
     && mv nmstate/nmstatectl /usr/local/bin/ \
     && chmod +x /usr/local/bin/nmstatectl \
