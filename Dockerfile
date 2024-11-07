@@ -91,6 +91,11 @@ RUN mkdir nmstate \
     && mv nmstate/nmstatectl /usr/local/bin/ \
     && chmod +x /usr/local/bin/nmstatectl \
     && rm -rf nmstate
+RUN mkdir /usr/local/gcloud \
+    && curl -Lo /usr/local/gcloud/google-cloud-cli-linux-arm.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-arm.tar.gz \
+    && tar -xvf /usr/local/gcloud/google-cloud-cli-linux-arm.tar.gz -C /usr/local/gcloud/ \
+    && /usr/local/gcloud/google-cloud-sdk/install.sh -q
+ENV PATH=$PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
 # RUN mkdir kube-linter \
 #     && curl -Lo kube-linter/kube-linter.tar.gz https://github.com/stackrox/kube-linter/releases/download/${KUBELINTER_VER}/kube-linter-linux.tar.gz \
