@@ -1,6 +1,6 @@
 # Utilityapp
 
-## Build and Push Image
+## Build and Push Image 
 ```bash
 # (1) change image repo in `Makefile`
 # (2) build image
